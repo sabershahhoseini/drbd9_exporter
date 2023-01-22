@@ -1,16 +1,18 @@
 FROM golang:1.19-alpine as builder
+
 RUN apk add --no-cache make gcc musl-dev
 
-COPY . /src
-RUN make -C /src install PREFIX=/pkg GO_BUILDFLAGS='-mod vendor'
+WORKDIR /src
+COPY . .
+RUN make && CGO_ENABLED=0 go build
 
 ################################################################################
 
-FROM alpine:latest
+FROM alpine:3.17
 
-MAINTAINER "Ben Cartwright-Cox <bencartwrightcox@monzo.com>"
+MAINTAINER "Saber Shahhoseini <sabershahhoseini@gmail.com>"
 
-COPY --from=builder /pkg/ /usr/
+COPY --from=builder /src/drbd9_exporter /usr/
 
 EXPOSE     9481
-ENTRYPOINT ["/usr/bin/drbd9_exporter"]
+ENTRYPOINT ["/usr/drbd9_exporter"]
