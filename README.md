@@ -110,4 +110,8 @@ drbd_out_of_sync_bytes{connection="n3",id="0",resource="r0"} 0
 # TYPE drbd_remote_unacknowledged gauge
 drbd_remote_unacknowledged{connection="n2",id="0",resource="r0"} 0
 drbd_remote_unacknowledged{connection="n3",id="0",resource="r0"} 0
+# HELP drbd_device_role role of drbd device
+# TYPE drbd_device_role gauge
+drbd_device_role{connection="n2",id="0",resource="r0",role="Primary"} 0
+drbd_device_role{connection="n3",id="0",resource="r0",role="Secondary"} 0
 ```
