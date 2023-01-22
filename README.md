@@ -1,7 +1,11 @@
 # drdb9\_exporter
 
 This is a Prometheus exporter that, when running on a node, checks the status
-of that node's DRBD volumes.
+of that node's DRBD volumes. You can use the Grafana sample dashboard at `grafana-dashboard` directory and visualize your metrics.
+Here's what it looks like:
+
+![Grafana dashboard](grafana-dashboard/dashboard-image-1.png)
+![Grafana dashboard](grafana-dashboard/dashboard-image-2.png)
 
 ## Installation
 
@@ -21,11 +25,14 @@ make
 CGO_ENABLED=0 go build
 ```
 
-To build the Docker container:
+To build and run the Docker container:
 
 ```bash
-CGO_ENABLED=0 make GOLDFLAGS="-w -linkmode external -extldflags -static" && docker build .
+CGO_ENABLED=0 make GOLDFLAGS="-w -linkmode external -extldflags -static" && docker build -t drbd9-exporter .
+docker run -p 9481:9481  -v '/sys/kernel/debug:/sys/kernel/debug' --name drbd9-exporter drbd9-exporter
 ```
+
+After you've launched the exporter, Grab the Grafana dashboard file at `grafana-dashboard/drbd-grafana-dashboard.json` and import it to your Grafana server.
 
 ## Usage
 
