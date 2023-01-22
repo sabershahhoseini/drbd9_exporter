@@ -27,11 +27,11 @@ CGO_ENABLED=0 go build
 To build and run the Docker container:
 
 ```bash
-CGO_ENABLED=0 make GOLDFLAGS="-w -linkmode external -extldflags -static" && docker build -t drbd9-exporter .
+docker build -t drbd9-exporter .
 docker run -p 9481:9481  -v '/sys/kernel/debug:/sys/kernel/debug' --name drbd9-exporter drbd9-exporter
 ```
 
-After you've launched the exporter, Grab the Grafana dashboard file at `grafana-dashboard/drbd-grafana-dashboard.json` and import it to your Grafana server.
+After you've launched the exporter, import the Grafana dashboard file at `grafana-dashboard/drbd-grafana-dashboard.json` to your Grafana server.
 
 ## Usage
 
