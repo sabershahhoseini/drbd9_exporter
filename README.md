@@ -8,11 +8,16 @@ Here's what it looks like:
 
 ## Installation
 
+You can install this project in 3 different ways:
+
+### Debian
+
 To build the deb file:
 
 ```
 debuild -b -uc -us
 ```
+### Binary
 
 To build the binary:
 
@@ -23,6 +28,8 @@ make
 ```bash
 CGO_ENABLED=0 go build
 ```
+
+### Docker
 
 To build and run the Docker container:
 
