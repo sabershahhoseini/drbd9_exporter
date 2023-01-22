@@ -7,6 +7,7 @@ RUN make -C /src install PREFIX=/pkg GO_BUILDFLAGS='-mod vendor'
 ################################################################################
 
 FROM alpine:latest
+
 MAINTAINER "Ben Cartwright-Cox <bencartwrightcox@monzo.com>"
 
 COPY --from=builder /pkg/ /usr/
