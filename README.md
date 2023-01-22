@@ -28,7 +28,7 @@ To build and run the Docker container:
 
 ```bash
 docker build -t drbd9-exporter .
-docker run -p 9481:9481  -v '/sys/kernel/debug:/sys/kernel/debug' --name drbd9-exporter drbd9-exporter
+docker run -d -p 9481:9481  -v '/sys/kernel/debug:/sys/kernel/debug' --name drbd9-exporter drbd9-exporter
 ```
 
 After you've launched the exporter, import the Grafana dashboard file at `grafana-dashboard/drbd-grafana-dashboard.json` to your Grafana server.
