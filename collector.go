@@ -15,6 +15,13 @@ var (
 		},
 		[]string{"resource", "connection", "id"},
 	)
+        deviceRole   = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "drbd_device_role",
+			Help: "Role of drbd device",
+		},
+		[]string{"resource","connection", "id", "role"},
+	)
 	diskUpToDate = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: "drbd_local_disk_up_to_date",
@@ -114,6 +121,7 @@ func (c Collector) Describe(ch chan<- *prometheus.Desc) {
 	connectionEstablished.Describe(ch)
 	diskUpToDate.Describe(ch)
 	connectionUnhealthy.Describe(ch)
+	deviceRole.Describe(ch)
 	for _, v := range gauges {
 		v.Describe(ch)
 	}
@@ -127,6 +135,7 @@ func (c Collector) Collect(ch chan<- prometheus.Metric) {
 		connectionEstablished.Collect(ch)
 		diskUpToDate.Collect(ch)
 		connectionUnhealthy.Collect(ch)
+		deviceRole.Collect(ch)
 
 		for _, v := range gauges {
 			v.Collect(ch)
@@ -161,6 +170,14 @@ func (c Collector) measure() error {
 		} else {
 			diskUpToDate.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID).Set(1)
 		}
+		
+		if connection.MyRole == "Primary" {
+			deviceRole.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID, connection.MyRole).Set(1)
+		} else {
+			deviceRole.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID, connection.MyRole).Set(0)
+		}
+		
+		
 
 		for _, kv := range connection.KVs {
 			if gauges[kv.Name] != nil {
