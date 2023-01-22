@@ -15,12 +15,12 @@ var (
 		},
 		[]string{"resource", "connection", "id"},
 	)
-        deviceRole   = prometheus.NewGaugeVec(
+	deviceRole = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: "drbd_device_role",
 			Help: "Role of drbd device",
 		},
-		[]string{"resource","connection", "id", "role"},
+		[]string{"resource", "connection", "id", "role"},
 	)
 	diskUpToDate = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -113,10 +113,10 @@ var (
 	}
 )
 
-//Collector implements the prometheus.Collector interface.
+// Collector implements the prometheus.Collector interface.
 type Collector struct{}
 
-//Describe implements the prometheus.Collector interface.
+// Describe implements the prometheus.Collector interface.
 func (c Collector) Describe(ch chan<- *prometheus.Desc) {
 	connectionEstablished.Describe(ch)
 	diskUpToDate.Describe(ch)
@@ -127,7 +127,7 @@ func (c Collector) Describe(ch chan<- *prometheus.Desc) {
 	}
 }
 
-//Collect implements the prometheus.Collector interface.
+// Collect implements the prometheus.Collector interface.
 func (c Collector) Collect(ch chan<- prometheus.Metric) {
 	err := c.measure()
 	//only report data when measurement was successful
@@ -170,14 +170,6 @@ func (c Collector) measure() error {
 		} else {
 			diskUpToDate.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID).Set(1)
 		}
-		
-		if connection.MyRole == "Primary" {
-			deviceRole.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID, connection.MyRole).Set(1)
-		} else {
-			deviceRole.WithLabelValues(connection.Resource, connection.RemoteHost, connection.ResourceID, connection.MyRole).Set(0)
-		}
-		
-		
 
 		for _, kv := range connection.KVs {
 			if gauges[kv.Name] != nil {
@@ -186,5 +178,12 @@ func (c Collector) measure() error {
 		}
 
 	}
+
+	if connections[0].MyRole == "Primary" {
+		deviceRole.WithLabelValues(connections[0].Resource, connections[0].RemoteHost, connections[0].ResourceID, connections[0].MyRole).Set(1)
+	} else {
+		deviceRole.WithLabelValues(connections[0].Resource, connections[0].RemoteHost, connections[0].ResourceID, connections[0].MyRole).Set(0)
+	}
+
 	return nil
 }
