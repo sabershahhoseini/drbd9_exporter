@@ -5,7 +5,6 @@ of that node's DRBD volumes. You can use the Grafana sample dashboard at `grafan
 Here's what it looks like:
 
 ![Grafana dashboard](grafana-dashboard/dashboard-image-1.png)
-![Grafana dashboard](grafana-dashboard/dashboard-image-2.png)
 
 ## Installation
 
